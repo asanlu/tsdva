@@ -3,23 +3,27 @@ import path from "path";
 
 export default {
   // antd按需引入方案
-  "extraBabelPlugins": [
+  extraBabelPlugins: [
     ["import", {
       "libraryName": "antd-mobile",
       "libraryDirectory": "lib",
-      "style": "css"
+      "style": true
     }]
   ],
   // 路径别名
-  "alias": {
+  alias: {
     "@": path.resolve(__dirname, "./src")
   },
   // proxy代理，请求后台数据
-  "proxy": {
+  proxy: {
     "/api": {
       "target": "http://jsonplaceholder.typicode.com/",
       "changeOrigin": true,
       "pathRewrite": { "^/api" : "" }
     }
-  }
+  },
+  hash: true,
+  html: {
+    template: './src/index.ejs',
+  },
 }
