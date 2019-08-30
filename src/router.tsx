@@ -1,7 +1,8 @@
 import React, { ReactNode } from 'react';
 import { Router, Route, Switch } from 'dva/router';
-import dynamic from 'dva/dynamic';
+import { DvaInstance } from 'dva';
 import { History } from 'history';
+import dynamic from 'dva/dynamic';
 import IndexPage from './routes/IndexPage';
 import Test from './routes/Test';
 
@@ -11,21 +12,34 @@ import { RouteConfig } from './interface';
 
 const getRouteComponent = (path: string) => 111;
 
-
-const createRoute = (routes: RouteConfig[]) => {
+const createRoute = (app: DvaInstance, routes: RouteConfig[]) => {
   routes.forEach((route: RouteConfig, index: number) => {
+    const curComponent = dynamic({
+      app,
+      models: () => [
+        import(`./models/${global}`),
+      ],
+      component: () => import(`./routes/${route.component}`),
+    });
     return (
-      <Route path={route.path} exact component={a} />
+      <Route path={route.path} exact component={curComponent} key={index} />
     );
   });
 }
 
-function RouterConfig({ history }: { history: History }): ReactNode {
+function RouterConfig({ history, app }: { history: History; app: DvaInstance }): ReactNode {
+  const TestComponent = dynamic({
+    app,
+    models: () => [
+      import('./models/global'),
+    ],
+    component: () => import('./routes/Test'),
+  });
   return (
     <Router history={history}>
       <Switch>
         <Route path="/" exact component={IndexPage} />
-        <Route path="/test" exact component={Test} />
+        <Route path="/test" exact component={TestComponent} />
       </Switch>
     </Router>
   );
