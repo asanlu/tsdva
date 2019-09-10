@@ -21,12 +21,12 @@ export default {
   },
   // 路径别名
   alias: {
-    "@": path.resolve(__dirname, "./src")
+    "@": path.resolve(__dirname, "./src"),
   },
   // proxy代理，请求后台数据
   proxy: {
     "/api": {
-      "target": "http://jsonplaceholder.typicode.com/",
+      "target": "https://api.douban.com/",
       "changeOrigin": true,
       "pathRewrite": { "^/api" : "" }
     }
